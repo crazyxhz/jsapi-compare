@@ -13,25 +13,20 @@ WebGL的成熟与规范，也为前端实现三维Web地图提供了技术支撑
 ### 数据和渲染的分离
 
 `3.x`版本的API，是紧紧围绕二维地图的核心类：[Map](!https://developers.arcgis.com/javascript/3/jsapi/map-amd.html) 来进行展开的。`Map`这个巨无霸类，既是前端二维地图数据模型的承载者，也包含了地图的渲染逻辑。而在`4.x`版本，地图核心得以解耦，![](https://ooo.0o0.ooo/2017/03/26/58d78e95985d6.jpg)
-
 在`4.x`版本中[Map](https://developers.arcgis.com/javascript/latest/api-reference/esri-Map.html)类仅仅代表地图数据逻辑的抽象，而二维地图和三维地图，分别有两个不同的类来支持Map对象的渲染实现：[MapView](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-MapView.html)、[SceneView](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html)。通过这样架构上的模型与渲染的分离，我们可以轻松的写出[二三维联动](https://developers.arcgis.com/javascript/latest/sample-code/views-synchronize/index.html)、多屏联动的地图应用。
 
 ### 二维地图实现的区别
 `3.x`版本的API，由于历史原因，地图渲染一直使用的是DOM元素直接渲染，而DOM元素的频繁修改是对前端性能有极大影响的。以最常见的的缓存地图为例，缓存底图实际上是由`<img>`元素引用缓存切片拼接而来：
-![](https://ooo.0o0.ooo/2017/03/26/58d7968092e10.jpg)
-这样当用户操作地图进行平移缩放的时候，浏览器会产生大量不必要的DOM重排、重绘。
+![](https://ooo.0o0.ooo/2017/03/26/58d7968092e10.jpg)这样当用户操作地图进行平移缩放的时候，浏览器会产生大量不必要的DOM重排、重绘。
 
 而在`4.x`API中，二维地图的渲染实现改为了Canvas API，如图：
-![](https://ooo.0o0.ooo/2017/03/26/58d79859a0560.jpg)
-使用Canvas API不仅极大的提高了前端地图的显示性能，并且还轻松解决了一直困扰`3.x`版本的地图旋转功能缺失的问题，现在，在`4.x` API的二维地图中，只需按住鼠标右键，就可以轻松旋转地图。
+![](https://ooo.0o0.ooo/2017/03/26/58d79859a0560.jpg)使用Canvas API不仅极大的提高了前端地图的显示性能，并且还轻松解决了一直困扰`3.x`版本的地图旋转功能缺失的问题，现在，在`4.x` API的二维地图中，只需按住鼠标右键，就可以轻松旋转地图。
 
 ### 更加人性化的API
 
 #### 读写属性的变化
 
-传统`3.x` 版本的API，对象属性的方法一般是通过`SetXXX` 和 `GetXXX` 来进行读写。例如[map.getLevel()](https://developers.arcgis.com/javascript/3/jsapi/map-amd.html#getlevel)，[map.setLevel()](https://developers.arcgis.com/javascript/3/jsapi/map-amd.html#setlevel)。
-
-而在`4.x`版本中，对象属性的读写被统一的定义为更简洁自然的方式：`map.basemap = 'streets'`。 在新版本的API中，所有属性的读写都可以直接通过赋值的方式赋予新的值并且触发新属性的功能。例如，上面的语句可以直接切换map的底图为`streets`。这在背后使用到了ES5的新特性[Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)，所有的getter 和setter都可以触发相应的事件，来进行程序状态的更新。
+传统`3.x` 版本的API，对象属性的方法一般是通过`SetXXX` 和 `GetXXX` 来进行读写。例如[map.getLevel()](https://developers.arcgis.com/javascript/3/jsapi/map-amd.html#getlevel)，[map.setLevel()](https://developers.arcgis.com/javascript/3/jsapi/map-amd.html#setlevel)。而在`4.x`版本中，对象属性的读写被统一的定义为更简洁自然的方式：`map.basemap = 'streets'`。 在新版本的API中，所有属性的读写都可以直接通过赋值的方式赋予新的值并且触发新属性的功能。例如，上面的语句可以直接切换map的底图为`streets`。这在背后使用到了ES5的新特性[Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)，所有的getter 和setter都可以触发相应的事件，来进行程序状态的更新。
 
 #### 更加统一的构造函数与autocast
 
