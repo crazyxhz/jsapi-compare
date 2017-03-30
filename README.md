@@ -67,7 +67,7 @@ require(["esri/geometry/Point"], function(Point) { /* code goes here */ });
 |缓存切片	|支持	|支持|
 |影像服务	|支持	|支持|
 |动态地图服务	|支持	|支持|
-|要素服务	|支持	|只支持查询和可视化不支持编辑|
+|要素服务	|支持	|支持|
 |Geometry Engine	|支持	|支持|
 |Web Scene	|不支持|	支持
 |Web Map	|支持	|部分支持|
